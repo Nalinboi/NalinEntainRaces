@@ -61,11 +61,14 @@ struct RacesView: View {
                 }
             }
             Spacer()
-            if let advertisedStart = race.advertisedStart?.seconds {
-                Text(String(advertisedStart))
+            if let advertisedStart = race.advertisedStart?.seconds,
+               let countdown = viewModel.timeUntil(timestamp: advertisedStart) {
+                Text(countdown)
             }
         }
     }
+    
+    
 }
 
 #Preview {

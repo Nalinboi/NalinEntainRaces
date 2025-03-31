@@ -82,7 +82,7 @@ enum RaceCategory: String, Decodable, CaseIterable {
 
 // MARK: - AdvertisedStart
 struct AdvertisedStart: Decodable {
-    let seconds: Int?
+    let seconds: TimeInterval?
 }
 
 // MARK: - RaceForm

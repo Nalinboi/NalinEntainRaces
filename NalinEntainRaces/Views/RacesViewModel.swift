@@ -19,6 +19,16 @@ class RacesViewModel: ObservableObject {
         }
     }
     
+    func timeUntil(timestamp: TimeInterval) -> String? {
+        let now = Date().timeIntervalSince1970
+        let remainingTime = max(timestamp - now, 0) // Calculate time left
+
+        let formatter = DateComponentsFormatter()
+        formatter.unitsStyle = .abbreviated
+        formatter.allowedUnits = [.day, .hour, .minute, .second]
+        
+        return formatter.string(from: remainingTime) // Format remaining time
+    }
     // Computed property to return sorted races
     var sortedRaces: [RaceSummary] {
         guard let nextToGoIds = races?.data?.nextToGoIDS,

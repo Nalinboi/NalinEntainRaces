@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
+    let networkManager: NetworkServiceProtocol
     var body: some View {
         RacesView(viewModel: RacesViewModel())
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView(networkManager: MockNetworkManager.shared)
 }

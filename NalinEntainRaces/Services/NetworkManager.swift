@@ -14,6 +14,8 @@ protocol NetworkServiceProtocol {
 
 class NetworkManager: NetworkServiceProtocol {
     static let shared = NetworkManager()
+    
+    var isMock: Bool { false }
 
     func fetchRaces() async -> Races? {
         let urlString = "https://api.neds.com.au/rest/v1/racing/?method=nextraces&count=10"
@@ -31,6 +33,4 @@ class NetworkManager: NetworkServiceProtocol {
             return nil
         }
     }
-    
-    var isMock: Bool { false }
 }

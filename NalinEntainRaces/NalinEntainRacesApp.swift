@@ -11,7 +11,7 @@ import SwiftUI
 struct NalinEntainRacesApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(networkManager: NetworkManager.shared)
         }
     }
 }

@@ -76,5 +76,5 @@ struct RacesView: View {
 }
 
 #Preview {
-    RacesView(viewModel: RacesViewModel())
+    RacesView(viewModel: RacesViewModel(networkManager: MockNetworkManager.shared))
 }

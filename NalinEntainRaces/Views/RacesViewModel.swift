@@ -17,12 +17,23 @@ import SwiftUI
     /// A list of dictionaries with the key being the id of the race and the value being the time remaining for the countdown.
     @Published var countdowns: [String: String] = [:]
     
+    let networkManager: NetworkServiceProtocol
+    
     /// The initialiser for the view model. Takes in a network manager which can be real or a mock.
     /// - Parameter networkManager: Can be read (NetworkManager) unless otherwise specificed (MockNetworkManager for previews and tests)
     public init(networkManager: NetworkServiceProtocol = NetworkManager.shared) {
+        self.networkManager = networkManager
         Task {
-            self.races = await networkManager.fetchRaces() // Asynchoronously make the get request from the api
+            await refreshRaces()
             startTimer() // Start updating the countdowns every second.
+        }
+    }
+    
+    /// Asynchoronously make the get request from the api to fetch the races
+    func refreshRaces() async {
+        let newRaces = await networkManager.fetchRaces() // Runs on background thread
+        await MainActor.run {
+            self.races = newRaces // UI update on main thread
         }
     }
     

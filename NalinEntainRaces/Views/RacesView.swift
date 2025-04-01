@@ -20,10 +20,17 @@ struct RacesView: View {
                 filterButton
                 raceList
             }
-            .navigationTitle("Upcoming Races")
+            .refreshable {
+                // The screen is able to be refreshed manually be the user.
+                Task {
+                    await viewModel.refreshRaces()
+                }
+            }
+            .navigationTitle("Upcoming Races") // The title
         }
     }
     
+    /// The picker at the top of the screen.
     @ViewBuilder
     var filterButton: some View {
         Section {
@@ -38,6 +45,7 @@ struct RacesView: View {
         }
     }
     
+    /// A list of race information cells.
     @ViewBuilder
     var raceList: some View {
         if !viewModel.sortedRaces.isEmpty {
@@ -49,6 +57,9 @@ struct RacesView: View {
         }
     }
     
+    /// Race information includes the Race name, number, race type and countdown
+    /// - Parameter race: The race summary with all the info needed for what to display here
+    /// - Returns: The race information calls in the list.
     @ViewBuilder
     func raceInformation(race: RaceSummary) -> some View {
         if let advertisedStart = race.advertisedStart?.seconds,
@@ -78,5 +89,6 @@ struct RacesView: View {
 }
 
 #Preview {
+    // Using mock network manager for the preview so we aren't always calling the api.
     RacesView(viewModel: RacesViewModel(networkManager: MockNetworkManager.shared))
 }

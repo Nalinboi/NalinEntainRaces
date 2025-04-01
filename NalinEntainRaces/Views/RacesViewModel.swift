@@ -12,7 +12,6 @@ import SwiftUI
     @Published var selectedCategory: RaceCategory? // Category filter
     /// A list of dictionaries with the key being the id of the race and the value being the time remaining for the countdown.
     @Published var countdowns: [String: String] = [:]
-    let filterOptions = ["All", "Horse", "Harness", "Greyhound"]
     
     // TODO: There is a Swift6 warning here that I can't get rid of
     // Unsure why, the singleton should be a Main Actor, and this should be called from an isolated context (marked with @MainActor

@@ -28,9 +28,12 @@ struct RacesView: View {
     var filterButton: some View {
         Section {
             Picker("Race Category", selection: $viewModel.selectedCategory) {
-                ForEach(viewModel.filterOptions, id: \.self) { category in
-                    Text(category).tag(category)
+                ForEach(RaceCategory.allCases, id: \.self) { category in
+                    if category != .unknown {
+                        Text(category.shortName).tag(category)
+                    }
                 }
+                Text("All").tag(nil as RaceCategory?)
             }
         }
     }

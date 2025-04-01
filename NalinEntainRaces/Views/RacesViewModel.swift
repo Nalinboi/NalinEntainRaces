@@ -55,9 +55,12 @@ import SwiftUI
         return nextToGoIds
             .compactMap { raceSummaries[$0] }
             .filter { race in
-                // TODO: Filter out the ones that are expired as well. 
-                // Filter by selected category if any
-                selectedCategory == nil || race.category == selectedCategory
+                guard let advertisedTime = race.advertisedStart?.seconds else {
+                    return false
+                }
+                let isCorrectCategory = selectedCategory == nil || race.category == selectedCategory
+                let shouldDisplay = shouldDisplay(timestamp: advertisedTime)
+                return isCorrectCategory && shouldDisplay
             }
             .prefix(5) // Only take the first 5 races
             .map { $0 }
@@ -66,7 +69,7 @@ import SwiftUI
     /// Returns a nice formatted string for a timer from now until the timestamp
     /// - Parameter timestamp: The timestamp in seconds that will be counted down towards
     /// - Returns: A formatted string for the remaining time left till the timestamp
-    func formattedTimeTill(timestamp: TimeInterval) -> String? {
+    private func formattedTimeTill(timestamp: TimeInterval) -> String? {
         let now = Date().timeIntervalSince1970
         let remainingTime = timestamp - now // Calculate time left
         
@@ -77,7 +80,10 @@ import SwiftUI
         return formatter.string(from: remainingTime) // Format remaining time
     }
     
-    func shouldDisplay(timestamp: TimeInterval) -> Bool {
+    /// Races should only display if it hasn't been longer than a minute since the race has started.
+    /// - Parameter timestamp: The time the race should have started
+    /// - Returns: Bool depending on if a race should be displayed or not.
+    private func shouldDisplay(timestamp: TimeInterval) -> Bool {
         let now = Date().timeIntervalSince1970
         let minute = 60.0
         return now < timestamp + minute

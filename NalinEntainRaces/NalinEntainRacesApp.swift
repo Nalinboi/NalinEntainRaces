@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct NalinEntainRacesApp: App {
+
     var body: some Scene {
         WindowGroup {
-            ContentView(networkManager: NetworkManager.shared)
+            // Use mock network manager in UI Tests if that launch argument exists
+            if ProcessInfo.processInfo.arguments.contains("-UITestMode") {
+                RacesView(viewModel: RacesViewModel(networkManager: MockNetworkManager.shared))
+            } else {
+                RacesView(viewModel: RacesViewModel(networkManager: NetworkManager.shared))
+            }
         }
     }
 }

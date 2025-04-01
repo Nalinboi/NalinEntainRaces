@@ -8,14 +8,13 @@
 import XCTest
 
 final class NalinEntainRacesUITests: XCTestCase {
+    let app = XCUIApplication()
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
+        // Adding a launch argument so that the app runs with mock data
+        app.launchArguments.append("-UITestMode")
+        app.launch()
     }
 
     override func tearDownWithError() throws {
@@ -23,13 +22,38 @@ final class NalinEntainRacesUITests: XCTestCase {
     }
 
     @MainActor
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testRaceCategoryPickers() throws {
+        // Check if "Upcoming Races" title is visible
+        XCTAssertTrue(app.navigationBars["Upcoming Races"].exists, "The navigation title is not displayed.")
+        
+        var pickerString = "All" // Starts off at all then keeps changing
+        var picker: XCUIElement {
+            app.buttons["Race Category, \(pickerString)"]
+        }
+        XCTAssertTrue(picker.exists, "Race category picker does not exist.")
+        let pickerOptions = ["Horse", "Greyhound", "Harness", "All"]
+        for optionString in pickerOptions {
+            picker.tap()
+            let optionElement = app.buttons[optionString]
+            XCTAssertTrue(optionElement.waitForExistence(timeout: 5), "The '\(optionString)' option is missing in the picker.")
+            optionElement.tap()
+            pickerString = optionString // Update the picker name for the tests
+            XCTAssertTrue(picker.waitForExistence(timeout: 5), "Picker did not update to '\(optionString)'.")
+        }
+        
     }
+    
+    
+    // TODO: I would have done the following UITests if I had more time
+    // It would require changes to my MockNetworkManager so that I could edit the AdvertisedStart times adjusted towards todays date.
+//    // Check if the 5 expected races names are there from the mock data
+//    let upcomingRaceNames = ["Monmore Bags", "Adana", "Lingfield", "Oxford", "Perry Barr Bags"]
+//    checkForTheseRaces(racesList: upcomingRaceNames)
+//    private func checkForTheseRaces(racesList: [String]) {
+//        for raceName in racesList {
+//            XCTAssertTrue(app.staticTexts[raceName].waitForExistence(timeout: 5), "\(raceName) not found in the list of races")
+//        }
+//    }
 
     @MainActor
     func testLaunchPerformance() throws {

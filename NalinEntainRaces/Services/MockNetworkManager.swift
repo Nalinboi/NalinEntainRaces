@@ -8,9 +8,9 @@
 import Foundation
 
 /// A MockNetworkManager that is used in previews and tests.
-public class MockNetworkManager: NetworkServiceProtocol {
+class MockNetworkManager: NetworkServiceProtocol {
     /// A singleton MockNetworkManager that can be injected in a class. Is brought in using dependency injection for the RacesViewModel but only for tests and Previews
-    static let shared = NetworkManager()
+    static let shared = MockNetworkManager()
     
     /// Fetches a locally stored json file and returns the Races object from that response stored in that file.
     /// - Returns: Returns the Races object

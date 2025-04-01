@@ -66,7 +66,7 @@ import SwiftUI
     /// Returns a nice formatted string for a timer from now until the timestamp
     /// - Parameter timestamp: The timestamp in seconds that will be counted down towards
     /// - Returns: A formatted string for the remaining time left till the timestamp
-    private func formattedTimeTill(timestamp: TimeInterval) -> String? {
+    func formattedTimeTill(timestamp: TimeInterval) -> String? {
         let now = Date().timeIntervalSince1970
         let remainingTime = timestamp - now // Calculate time left
         
@@ -80,7 +80,7 @@ import SwiftUI
     /// Races should only display if it hasn't been longer than a minute since the race has started.
     /// - Parameter timestamp: The time the race should have started
     /// - Returns: Bool depending on if a race should be displayed or not.
-    private func shouldDisplay(timestamp: TimeInterval) -> Bool {
+    func shouldDisplay(timestamp: TimeInterval) -> Bool {
         let now = Date().timeIntervalSince1970
         let minute = 60.0
         return now < timestamp + minute

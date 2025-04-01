@@ -7,7 +7,7 @@
 
 import Foundation
 
-class MockNetworkManager: NetworkServiceProtocol {
+public class MockNetworkManager: NetworkServiceProtocol {
     static let shared = NetworkManager()
     
     var isMock: Bool { true }

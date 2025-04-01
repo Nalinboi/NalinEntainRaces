@@ -57,6 +57,8 @@ struct RacesView: View {
                 VStack(alignment: .leading) {
                     if let meetingName = race.meetingName {
                         Text(meetingName)
+                            .font(.title3)
+                            .bold()
                         if let raceNumber = race.raceNumber {
                             Text("Race number: \(raceNumber)")
                         }

@@ -48,22 +48,25 @@ struct RacesView: View {
     
     @ViewBuilder
     func raceInformation(race: RaceSummary) -> some View {
-        HStack(alignment: .top) {
-            VStack(alignment: .leading) {
-                if let meetingName = race.meetingName {
-                    Text(meetingName)
-                    if let raceNumber = race.raceNumber {
-                        Text("Race number: \(raceNumber)")
-                    }
-                    if let raceType = race.category?.shortName {
-                        Text("Race type: \(raceType)")
+        // TODO: Make the three methods below into one - viewmodel should handle all logic
+        if let advertisedStart = race.advertisedStart?.seconds,
+           let countdown = viewModel.countdowns[race.id],
+           viewModel.shouldDisplay(timestamp: advertisedStart) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading) {
+                    if let meetingName = race.meetingName {
+                        Text(meetingName)
+                        if let raceNumber = race.raceNumber {
+                            Text("Race number: \(raceNumber)")
+                        }
+                        if let raceType = race.category?.shortName {
+                            Text("Race type: \(raceType)")
+                        }
                     }
                 }
-            }
-            Spacer()
-            if let advertisedStart = race.advertisedStart?.seconds,
-               let countdown = viewModel.timeUntil(timestamp: advertisedStart) {
+                Spacer()
                 Text(countdown)
+                    .foregroundStyle(viewModel.hasStarted(timestamp: advertisedStart) ? .red : .green)
             }
         }
     }

@@ -10,7 +10,10 @@ import SwiftUI
 @MainActor class RacesViewModel: ObservableObject {
     /// The object returned from the json response of the api given.
     @Published var races: Races?
-    @Published var selectedCategory: RaceCategory? // Category filter
+    
+    /// The selected category filter for the picker. If nil, will display all types of races.
+    @Published var selectedCategory: RaceCategory?
+    
     /// A list of dictionaries with the key being the id of the race and the value being the time remaining for the countdown.
     @Published var countdowns: [String: String] = [:]
     

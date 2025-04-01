@@ -7,12 +7,15 @@
 
 import Foundation
 
+/// A MockNetworkManager that is used in previews and tests.
 public class MockNetworkManager: NetworkServiceProtocol {
+    /// A singleton MockNetworkManager that can be injected in a class. Is brought in using dependency injection for the RacesViewModel but only for tests and Previews
     static let shared = NetworkManager()
     
-    var isMock: Bool { true }
-
+    /// Fetches a locally stored json file and returns the Races object from that response stored in that file.
+    /// - Returns: Returns the Races object
     func fetchRaces() async -> Races? {
+        // Here also rather than throwing an error and crashing the app I am printing errors.
         do {
             return try fetchLocalData(fileName: "mockRaces")
         } catch {

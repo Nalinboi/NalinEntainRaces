@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-@MainActor protocol NetworkServiceProtocol {
+protocol NetworkServiceProtocol {
     var isMock: Bool { get }
     func fetchRaces() async -> Races?
 }

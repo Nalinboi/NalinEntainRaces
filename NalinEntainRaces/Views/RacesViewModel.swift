@@ -8,22 +8,25 @@
 import SwiftUI
 
 @MainActor class RacesViewModel: ObservableObject {
+    /// The object returned from the json response of the api given.
     @Published var races: Races?
     @Published var selectedCategory: RaceCategory? // Category filter
     /// A list of dictionaries with the key being the id of the race and the value being the time remaining for the countdown.
     @Published var countdowns: [String: String] = [:]
     
+    /// The initialiser for the view model. Takes in a network manager which can be real or a mock.
+    /// - Parameter networkManager: Can be read (NetworkManager) unless otherwise specificed (MockNetworkManager for previews and tests)
     public init(networkManager: NetworkServiceProtocol = NetworkManager.shared) {
         Task {
             self.races = await networkManager.fetchRaces() // Asynchoronously make the get request from the api
-            startTimer()
+            startTimer() // Start updating the countdowns every second.
         }
     }
     
     private var timer: Timer?
     
+    /// Will be updating all the countdowns every second
     func startTimer() {
-        // Fire every 1 second
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             Task {
                 await self.updateCountdowns()
@@ -86,6 +89,9 @@ import SwiftUI
         return now < timestamp + minute
     }
     
+    /// A method that checks if the race has started yet. Is espectially useful for the view where the countdown will be green if it hasn't started yet, or red if it has.
+    /// - Parameter timestamp: The time the race should start
+    /// - Returns: Bool depending on if a race has started or not.
     func hasStarted(timestamp: TimeInterval) -> Bool {
         let now = Date().timeIntervalSince1970
         return now > timestamp

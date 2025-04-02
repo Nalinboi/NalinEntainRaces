@@ -8,7 +8,9 @@
 import Foundation
 
 /// A MockNetworkManager that is used in previews and tests.
-class MockNetworkManager: NetworkServiceProtocol {
+/// Actors protects its mutable state by ensuring that only one task can access its properties at a time, making them safe for concurrent use.
+/// Below I am making MockNetworkManager is safe to share across multiple threads by conforming to Sendable
+actor MockNetworkManager: NetworkServiceProtocol, Sendable {
     /// A singleton MockNetworkManager that can be injected in a class. Is brought in using dependency injection for the RacesViewModel but only for tests and Previews
     static let shared = MockNetworkManager()
     

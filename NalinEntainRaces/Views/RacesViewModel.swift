@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-@MainActor class RacesViewModel: ObservableObject {
+class RacesViewModel: ObservableObject {
     /// The object returned from the json response of the api given.
     @Published var races: Races?
     
@@ -19,44 +19,42 @@ import SwiftUI
     
     let networkManager: NetworkServiceProtocol
     
+    private var isRunning = false
+    
     /// The initialiser for the view model. Takes in a network manager which can be real or a mock.
     /// - Parameter networkManager: Can be read (NetworkManager) unless otherwise specificed (MockNetworkManager for previews and tests)
-    public init(networkManager: NetworkServiceProtocol = NetworkManager.shared) {
-        self.networkManager = networkManager
+    @MainActor public init(networkManager: NetworkServiceProtocol = NetworkManager.shared) {
+         self.networkManager = networkManager
         Task {
             await refreshRaces()
-            startTimer() // Start updating the countdowns every second.
+            await startTimer()
         }
     }
     
     /// Asynchoronously make the get request from the api to fetch the races
-    func refreshRaces() async {
-        let newRaces = await networkManager.fetchRaces() // Runs on background thread
-        await MainActor.run {
-            self.races = newRaces // UI update on main thread
+    /// @MainActor ensures UI updates happen on the main thread.
+    /// However, the Task closure nesures the api fetch is happening asynchronously on the background thread.
+    @MainActor func refreshRaces() async {
+        Task {
+            self.races = await networkManager.fetchRaces() // UI update on main thread
         }
     }
     
     private var timer: Timer?
     
-    /// Will be updating all the countdowns every second
-    func startTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            Task {
-                await self.updateCountdowns()
+    /// Will be updating all the countdowns every second. Needs to be main actor as this is being updated every second.
+    @MainActor func startTimer() async {
+        Task {
+            isRunning = true
+            while isRunning {
+                for race in self.sortedRaces {
+                    if let advertisedStart = race.advertisedStart?.seconds {
+                        self.countdowns[race.id] = self.formattedTimeTill(timestamp: advertisedStart)
+                    }
+                }
+                // Wait for 1 second before updating again
+                try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
             }
-        }
-    }
-    
-    /// Will create or fetch a countdown for a given id
-    /// - Parameter id: The id of the race
-    /// - Returns: A formatted string of the countdown
-    func updateCountdowns() {
-        for race in sortedRaces {
-            guard let advertisedStart = race.advertisedStart?.seconds else {
-                break
-            }
-            self.countdowns[race.id] = self.formattedTimeTill(timestamp: advertisedStart)
         }
     }
     

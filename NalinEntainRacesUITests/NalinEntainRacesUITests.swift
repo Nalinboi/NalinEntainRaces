@@ -7,14 +7,10 @@
 
 import XCTest
 
-final class NalinEntainRacesUITests: XCTestCase {
-    let app = XCUIApplication()
+@MainActor final class NalinEntainRacesUITests: XCTestCase {
 
     override func setUpWithError() throws {
         continueAfterFailure = false
-        // Adding a launch argument so that the app runs with mock data
-        app.launchArguments.append("-UITestMode")
-        app.launch()
     }
 
     override func tearDownWithError() throws {
@@ -23,6 +19,9 @@ final class NalinEntainRacesUITests: XCTestCase {
 
     @MainActor
     func testRaceCategoryPickers() throws {
+        let app = XCUIApplication()
+        app.launchArguments.append("-UITestMode") // Adding a launch argument so that the app runs with mock data
+        app.launch()
         // Check if "Upcoming Races" title is visible
         XCTAssertTrue(app.navigationBars["Upcoming Races"].exists, "The navigation title is not displayed.")
         

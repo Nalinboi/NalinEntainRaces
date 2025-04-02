@@ -11,7 +11,10 @@ protocol NetworkServiceProtocol {
     func fetchRaces() async -> Races?
 }
 
-class NetworkManager: NetworkServiceProtocol {
+/// A NetworkManager which is used for making requests
+/// Actors protects its mutable state by ensuring that only one task can access its properties at a time, making them safe for concurrent use.
+/// Below I am making NetworkManager is safe to share across multiple threads by conforming to Sendable
+actor NetworkManager: NetworkServiceProtocol, Sendable {
     /// A singleton NetworkManager that can be injected in a class. Is brought in using dependency injection for the RacesViewModel
     static let shared = NetworkManager()
     

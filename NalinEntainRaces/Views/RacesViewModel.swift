@@ -45,6 +45,7 @@ class RacesViewModel: ObservableObject {
     /// Will be updating all the countdowns every second. Needs to be main actor as this is being updated every second.
     @MainActor func startTimer() async {
         Task {
+            var counter = 0
             isRunning = true
             while isRunning {
                 for race in self.sortedRaces {
@@ -54,6 +55,12 @@ class RacesViewModel: ObservableObject {
                 }
                 // Wait for 1 second before updating again
                 try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
+                counter += 1
+                if counter == 60 {
+                    // Automatically fetch the api every minute
+                    await refreshRaces()
+                    counter = 0
+                }
             }
         }
     }

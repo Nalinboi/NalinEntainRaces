@@ -60,7 +60,7 @@ If this could have been done I would have had far more UITests.
 
 ## Future Improvements
 
-1. **Automatic refreshing**: Currently the races can be refreshed although I would like it to automatically refresh. I just wasn't really sure what we were prioritising and was short on time. I wasn't sure if we wanted to keep adding more to the count for the GET request if lets say you filtered for Horse races, and the 30 races you pulled still only had Horse races.
+1. **Pagination**: Currently the races can be refreshed and also happens every minute. I wasn't sure if we wanted to keep adding more to the count for the GET request if lets say you filtered for Horse races, and the 30 races you pulled still only had Horse races. Could lead to infinite paging if an expected category never pulls through. 
    
 3. **Multiple filter options**: Pickers are intended to be used in a way that you only pick one, but I would have liked the feature for multiple filters
    

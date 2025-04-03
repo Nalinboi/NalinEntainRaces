@@ -45,7 +45,7 @@ Here is a breakdown of what I was able to achieve
     * meeting name, ✅
     * race number and ✅
     * advertised start as a countdown for each race.✅
-* As a user, I should always see 5 races and data should automatically refresh. ❌ (ran out of time)
+* As a user, I should always see 5 races and data should automatically refresh. ✅ (partially true, the data automatically refreshes every minute, however I do not implement paging. So if you filter, there may be 5 races shown.
 
 ## Challenges and Decisions
 

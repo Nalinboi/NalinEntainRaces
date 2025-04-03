@@ -19,6 +19,10 @@ The app fetches an API given by Entain for the race information to be displayed.
 Unit and UITests have also been implemented.
 The app was made in SwiftUI with Swift 6.
 
+Here's a quick demo!
+
+https://github.com/user-attachments/assets/1d0b96f2-da02-4ca1-8802-b23b3ce0426d
+
 ## Features
 
 - **Race List**: Displays a list of upcoming races, each with its race number, category, and a countdown to the race start.

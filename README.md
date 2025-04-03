@@ -15,11 +15,14 @@ Here I will discuss what I built, what challenges there were, and what I would d
 ## Project Overview
 
 This is an iOS app made for Entain to showcase my skills. This app shows 5 races at a time, and has a countdown timer for each race. Races have categories that can be filtered with the picker.
+
 The app fetches an API given by Entain for the race information to be displayed. I utilise an MVVM archetecture and use dependency injections for NetworkManagers to be injected (real or mock).
 Unit and UITests have also been implemented.
 The app was made in SwiftUI with Swift 6.
 
 Here's a quick demo!
+
+*Note*: The app automatically fetches and refreshes the UI every 60 seconds. In the demo I mention that this was not completed which is no longer true.
 
 https://github.com/user-attachments/assets/1d0b96f2-da02-4ca1-8802-b23b3ce0426d
 
